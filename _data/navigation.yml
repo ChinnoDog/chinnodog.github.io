@@ -1,7 +1,7 @@
 # main links links
 main:
-  - title: "Posts"
-    url: /year-archive/
+#  - title: "Posts"
+#    url: /year-archive/
 
   - title: "Categories"
     url: /categories/
@@ -9,9 +9,8 @@ main:
   - title: "Tags"
     url: /tags/
 
-  - title: "Pages"
-    url: /page-archive/
+#  - title: "Pages"
+#    url: /page-archive/
 
-  - title: "Collections"
-    url: /collection-archive/
-    
+#  - title: "Collections"
+#    url: /collection-archive/
