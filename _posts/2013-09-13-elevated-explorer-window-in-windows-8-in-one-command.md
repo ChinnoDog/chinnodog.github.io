@@ -1,14 +1,15 @@
 ---
 title: Elevated Explorer Window in Windows 8 in One Command
-date: 2013-09-13T17:11:11+00:00
-permalink: /elevated-explorer-window-in-windows-8-in-one-command/
+date: 2013-09-13 13:11:11 -04:00
+permalink: "/elevated-explorer-window-in-windows-8-in-one-command/"
 categories:
-  - Windows
+- Windows
 tags:
-  - security
-  - sysadmin
-  - Windows 8
+- security
+- sysadmin
+- Windows 8
 ---
+
 The problem: Windows 8 forces you to run with UAC enabled if you want Metro apps to work, and that means that all of your explorer windows run without elevated privileges. I know, UAC woes are old news! There are lots of guides out there about various ways to "trick" Windows into opening Explorer with with an admin token. They all have problems though, such as:
 
   * The procedure no longer works on Windows 8.

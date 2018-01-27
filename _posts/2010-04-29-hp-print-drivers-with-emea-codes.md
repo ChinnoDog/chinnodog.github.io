@@ -1,10 +1,11 @@
 ---
 title: HP Print drivers with EMEA codes
-date: 2010-04-29T12:05:51+00:00
-permalink: /hp-print-drivers-with-emea-codes/
+date: 2010-04-29 08:05:51 -04:00
+permalink: "/hp-print-drivers-with-emea-codes/"
 categories:
-  - Windows
+- Windows
 ---
+
 I realize this is a very specific post, but I figured that I had done the research already and someone else out there might find this useful.  When you go to HP’s site to download the driver for the M1522 printer (and some others) you find a bewildering array of choices such as the ones on [this page](http://web.archive.org/web/20110203085002/http://h20000.www2.hp.com/bizsupport/TechSupport/SoftwareIndex.jsp?lang=en&cc=us&prodNameId=3442754&prodTypeId=18972&prodSeriesId=3442750&swLang=8&taskId=135&swEnvOID=4063).  Under the Software subheading you find the following:
 
   * HP LaserJet M1522 MFP Series Full Solution AM-EMEA1

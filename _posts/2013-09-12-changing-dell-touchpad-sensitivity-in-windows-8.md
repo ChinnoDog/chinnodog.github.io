@@ -1,14 +1,15 @@
 ---
 title: Changing Dell Touchpad Sensitivity in Windows 8
-date: 2013-09-12T14:24:59+00:00
-permalink: /changing-dell-touchpad-sensitivity-in-windows-8/
+date: 2013-09-12 10:24:59 -04:00
+permalink: "/changing-dell-touchpad-sensitivity-in-windows-8/"
 categories:
-  - Windows
+- Windows
 tags:
-  - Dell
-  - Productivity
-  - Windows 8
+- Dell
+- Productivity
+- Windows 8
 ---
+
 It is most annoying when one is trying to type and is constantly hitting the touchpad by accident. Palm check controls will help reduce this when typing but unless sensitivity is turned down it will constantly happen when not typing as well. So, I opened the touchpad applet from the tray on my new Dell E6530 to fix this and I found...
 
 ![dell missing touchpad controls](/images/dell_missing_touchpad_controls.jpg)

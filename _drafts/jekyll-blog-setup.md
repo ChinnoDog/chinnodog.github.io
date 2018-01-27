@@ -1,7 +1,6 @@
 ---
 title: How to set up a blog with Jekyll and Minimal Mistakes
-categories:
-tags:
+date: 2018-01-27 17:28:00.049000000 -05:00
 ---
 
 This is a quick and dirty guide on how to set up a blog with [Jekyll](https://jekyllrb.com/) and the [Minimal Mistakes](https://mmistakes.github.io/minimal-mistakes/)[^1] theme for free using [Github Pages](https://pages.github.com/). Both Jekyll and Minimal Mistakes are well documented. Use this guide if you are too lazy (or efficient!) to absorb all that before you get started.  These instructions work on any operating system[^2].

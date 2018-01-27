@@ -1,10 +1,11 @@
 ---
 title: Making bitlbee Work in Ubuntu 8.10 (Intrepid)
-date: 2009-02-13T02:16:22+00:00
-permalink: /making-bitlbee-work-in-ubuntu-8-10-intrepid/
+date: 2009-02-12 21:16:22 -05:00
+permalink: "/making-bitlbee-work-in-ubuntu-8-10-intrepid/"
 categories:
-  - Ubuntu
+- Ubuntu
 ---
+
 [Bitlbee](http://web.archive.org/web/20100730002710/http://www.bitlbee.org/) is a IRC proxy that allows you to connect to instant messenger services using an IRC client.  It emulates an IRC server so you can connect to it from your favorite IRC client and then plug in your account information.  You can install it on a server for shared use or install it on a workstation to connect to locally.  Unfortunately, it doesn’t work out of the box in Ubuntu.  Here is what I did to install it.
 
 ```bash
