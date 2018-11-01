@@ -1,7 +1,11 @@
 ---
 title: Install Ubuntu with Full Disk Encryption and Encrypted Boot
-categories: Ubuntu
-tags: security grub
+date: 2018-10-31 00:00:00 Z
+categories:
+- Ubuntu
+tags:
+- security
+- grub
 ---
 
 These are directions for installing Ubuntu with <code>/boot</code> encrypted and stored on LVM. We accomplish this feat by using the LUKS support in grub to decrypt the partitions during the first stage of the boot process. Since grub can also read LVM that means that <code>/boot</code> can be stored on an LVM logical volume. Info collected from... well, I don't remember anymore. Sorry, Internet. So boot up to the Ubuntu LiveCD and let's begin.
