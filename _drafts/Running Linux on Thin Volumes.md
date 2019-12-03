@@ -32,11 +32,34 @@ The discard command was originally used by SSDs to allow you to request that blo
 ## Zero-Based Free Space
 Before discard was supported the only way to know that space is unused is that it is filled with zeros. When you delete a file from most filesystems the previously used space is usually not zeroed out. It is left with garbage on it and marked free in the allocation table. In order for the lower level block device to recognize it is free the unused space in the filesystem must be zeroed out. Also, the block device may have a separate out of band reclamation process (sometimes manual) that is used to recognize zero blocks and take them out of service.
 
-# So ... How Big?
-There is inevitably some type of size estimation we must do if we are going to allow volumes to grow "without bounds". The reasonable limit to size everything is no longer based on what you will use, but the limits of your physical system. E.g. if you have Hypervisor with 2TB of storage you could make all disks 2TB. Obviously no single disk with reach this limit. Making disks this large isn't necessarily free though, as I will detail down below. Also, if you had a 2PB storage array you probably wouldn't use disks that are 2PB. Use the maximum size you will allow any VM to use.
+# Not All Storage is Dynamic
+Thin provisioning is not available everywhere. However, this is not a problem so long as it is sandwiched by storage layers that can pass information through about free space. Below is a list of some layers that are not dynamic.
 
-# About Block Devices
-There are a lot of possible block devices in Linux. I'm going to list them below to discuss their quirks. This list does not imply anything about the order you nest these devices. As long as you can inform the layer beneath about free space your scheme will work. The following properties are covered in the table below:
+## Partition Table
+This is the lowest level allocation table visible to software and the only one the BIOS can read. The only concept of free space is that which is not contained within a partition, and that is extremely inflexible since it is tied directly to hard disk geometry. As a general rule you should use the fewest partitions possible to avoid managing partition boundaries later. On an MSDOS partition table this is one partition. On GPT this is two partitions since you also need an EFI boot partition[^8]. If the block device containing the partition table is a physical disk then a dynamic partition table doesn't add any functionality. If it is a virtual disk then free space will be recognized by a different method (see below).
+
+## LUKS
+LUKS encrypts the underlying block device, including the free space. A good encryption algorithm won't let an attacker be able to discover the difference between used space and free space. LUKS now allows you to pass through the discard command. Wait, what about not being able to discern free space from used? You are right. If you pass the discard command through LUKS to a block device that accepts it then it will be quite obvious which parts of your volume is used since the unused part will return all zeros. If you are trying to hide data in your encrypted volume this may not be what you want.
+
+# Dynamic Storage Devices
+All of the block device types below have the following attributes:
+* Capable of multiplexing access by creating virtual block devices
+* Have some amount of overhead for storing and accessing virtual device metadata
+* Have a method to measure free space outside of of the virtual block devices
+* Have a way to recover free space and return it to the pool
+
+
+## Physical Storage
+You may find it surprising to find physical storage on the list of dynamic storage devices. You can't magically make your disk larger and there isn't a way to return unused storage for a refund at your local Best Buy. Internally though modern storage devices do in fact have some spare storage. They are hot spares, waiting to be called into service when a memory chip goes or disk sector goes bad. The details are hidden away from you but you should still be [monitoring SMART](https://www.linuxjournal.com/article/6983) to ensure you do not run out of space. You need not worry about the overhead of this process since it is included in the device specifications.
+
+## Storage Array / SAN
+Storage arrays aggregate physical storage devices and present them as virtual storage to its clients, usually over fiber channel, iSCSI, or other network transport. We are specifically talking about storage arrays that support thin volumes here since they are the only ones that meet the criteria for dynamic storage. Overhead information and free space monitoring will have to come from your vendor. If you build the storage array yourself you should be able to estimate based on the information in this post or the other block devices you have used.
+
+## Virtual Disks
+Thin provisioned Virtual disks are provided by hypervisors as files for storing the hard disks of VMs. Multiplexing of access actually occurs outside the virtual disk file since they all share storage provided by the hypervisor. The allocation table metadata for your disk could be stored in the same file as the data or it could be stored in a second file dedicated to mapping data to used portions of the virtual disk. Your virtual disk file incurs two types of overhead. The first is for expanding the disk since this requires a filesystem operation. The second is the time it takes to consult the metadata prior to every read/write operation. On most hypervisors this overhead is managable. You can decrease the overhead at the expense of wasted disk space by increasing the granularity of your metadata. This will cause larger chunks to be allocated to the disk per request and decrease the size of the metadata.
+
+# Placeholder
+There are a lot of possible block devices in Linux. I'm going to list the common ones below to discuss their quirks. The following properties are covered in the table below:
 
 | Attribute | Description |
 |-|-|
@@ -71,6 +94,9 @@ table th:nth-of-type(4) {
 | Filesystems | Most sysadmins know far more about this overhead than any other. See the documentation for your filesystem to learn how much overhead its metadata consumes. In order to recognize free space the filesystem must be mounted with the `discard` option. This is not always efficient since the discard will block the IO operations to the disk. It is often preferable to cron `fstrim -a` in your operating system to do a bulk discard at a regular interval. | `df` command tells you how much free space is available on all mounted filesystems. | Reclamation of space from deleted files is built in as a core design consideration. If you mount the filesystem with the `discard` option then it will pass the discards to the next block device layer. |
 | LUKS | The LUKS device itself is not dynamic. It encrypts everything written to it. | Because LUKS encrypts everything 1-to-1
 
+# So ... How Big?
+Within dynamic layers you can use as much as needed without concern for disk space boundaries. For static layers there is inevitably some type of size estimation we must do as a matter of practicality. The reasonable limit to sizing static layers is no longer based on what you will use, but the limits of your physical system. E.g. if you have Hypervisor with 2TB of storage you could make all disks 2TB. Obviously no single disk with reach this limit. Making disks this large isn't necessarily free though, as I will detail down below. Also, if you had a 2PB storage array you probably wouldn't use disks that are 2PB because few VMs would have a use case for this much storage. Use the maximum size you will allow any VM to use.
+
 [^1]: Note that older SSDs were sometimes *slower* with the discard command enabled or even worse, unstable. Some SSD manufacturers will recommend you not bother with the discard command.
 
 [^2]: If you are concerned about security you will also realize that the bad blocks are still there when they are decommissioned. You can't normally read them but that doesn't mean someone else can't find a way.
@@ -84,3 +110,5 @@ table th:nth-of-type(4) {
 [^6]: Grub does not currently support booting from a thin volume. If your /boot volume is on LVM it must be a standard volume and not part of the thin pool.
 
 [^7]: See `lvmthin(7)``
+
+[^8]: Some flavors of Linux also require a /boot partition. This is unfortunate since grub has long supported booting from LVM. Make the /boot partition big enough so you don't run out of space for kernels and initramfs. On many systems this is 1GB.
