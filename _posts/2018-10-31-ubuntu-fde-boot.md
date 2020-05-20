@@ -10,6 +10,8 @@ tags:
 
 These are directions for installing Ubuntu with <code>/boot</code> encrypted and stored on LVM. We accomplish this feat by using the LUKS support in grub to decrypt the partitions during the first stage of the boot process. Since grub can also read LVM that means that <code>/boot</code> can be stored on an LVM logical volume. Info collected from... well, I don't remember anymore. Sorry, Internet. So boot up to the Ubuntu LiveCD and let's begin.
 
+**Edit 2020-05-19**: The original version of this post had a terrible security bug! It was recorded on Launchpad in [bug #1835095](https://bugs.launchpad.net/ubuntu/+source/calamares/+bug/1835095). I have since amended the directions below to include the fix.
+
 # Contents
 * TOC
 {:toc}
@@ -143,6 +145,13 @@ cat > /etc/initramfs-tools/hooks/crypto_keyfile << EOF
 cp /crypto_keyfile.bin "\${DESTDIR}"
 EOF
 chmod +x /etc/initramfs-tools/hooks/crypto_keyfile
+
+# If someone extracts the initramfs after we add the key file it will be
+#  in the clear. Protect it by setting key permissions within initramfs
+cat > /etc/initramfs-tools/conf.d/restrict-umask.conf << EOF
+# Added to prevent LUKS key disclosure
+UMASK=0077
+EOF
 
 # Now just rebuilt the initramfs!
 update-initramfs -c -k all
