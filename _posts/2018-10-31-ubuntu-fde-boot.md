@@ -158,3 +158,5 @@ If all has gone well you can now reboot and you will be prompted for a password.
 # Notes
 * I tested these directions on Ubuntu 18.04 but originally used them on an older version
 * Currently do-release-upgrade will cause grub-efi-amd64-signed to be installed which will break this configuration. If you upgrade Ubuntu then remove the package before you reboot and use dpkg to reinstall grub-efi-amd64.
+* Attempts to use these directions with the LUKS2 format may result in failure. This format became available in some distributions after this article was originally written and as usual the other components will need to catch up. Keep your eyes peeled on [grub bug #55093](https://savannah.gnu.org/bugs/?55093) for more info. Thanks to
+Jérémie Liénard for finding this.
