@@ -10,7 +10,7 @@ tags:
 
 These are directions for installing Ubuntu with <code>/boot</code> encrypted and stored on LVM. We accomplish this feat by using the LUKS support in grub to decrypt the partitions during the first stage of the boot process. Since grub can also read LVM that means that <code>/boot</code> can be stored on an LVM logical volume. Info collected from... well, I don't remember anymore. Sorry, Internet. So boot up to the Ubuntu LiveCD and let's begin.
 
-**Edit 2020-05-19**: The original version of this post had a terrible security bug! It was recorded on Launchpad in [bug #1835095](https://bugs.launchpad.net/ubuntu/+source/calamares/+bug/1835095). I have since amended the directions below to include the fix.
+**Edit 2020-05-19**: The original version of this post had a terrible security bug! Thanks to Sebastian Tönnessen for pointing this out. The bug was recorded on Launchpad in [bug #1835095](https://bugs.launchpad.net/ubuntu/+source/calamares/+bug/1835095). I have since amended the directions below to include the fix.
 
 # Contents
 * TOC
